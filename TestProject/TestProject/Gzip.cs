@@ -166,7 +166,7 @@ namespace TestProject
 				               "\nЭх, чужак! Общий съём цен шляп (юфть) — вдрызг!				" +
 				               "\nЭх, чужд кайф, сплющь объём вши, грызя цент.				" +
 				               "\nЧушь: гид вёз кэб цапф, юный жмот съел хрящ.");
-				for (int i = 0; i < 1910573 * gb; i++) {
+				for (long i = 0; i < 1910573 * gb; i++) {
 					stream.Write(array, 0, array.Length);
 					Console.CursorLeft = 0;
 					if (i % 100 == 0) {
