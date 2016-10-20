@@ -16,7 +16,7 @@ namespace TestProject
 	/// <summary>
 	/// Description of Gzip.
 	/// </summary>
-	public class Gzip
+	public static class Gzip
 	{
 		private static int countThread = Environment.ProcessorCount * 2;
 		private static byte[][] dataArray = new byte[countThread][];
@@ -24,9 +24,7 @@ namespace TestProject
 		private static int buffersize = 1024 * 1024;
 			
 		
-		public Gzip()
-		{
-		}
+	
 		public static void Compress(string inFile, string pathOutFile = "")
 		{
 			if (pathOutFile == "") {
@@ -34,41 +32,48 @@ namespace TestProject
 			}
 			byte[] buffer = new byte[buffersize];
 			int _buffersize = 10;
-			Console.WriteLine("Сжатие началось");
-			using (FileStream streaminFile = new FileStream(inFile, FileMode.Open)) {
-				using (FileStream outFile = new FileStream(pathOutFile, FileMode.Create)) {
-					while (streaminFile.Position < streaminFile.Length) {
-						Thread[] arrayThreads = new Thread[countThread];
-						for (int i = 0; (i < countThread) && (streaminFile.Position < streaminFile.Length); i++) {
+			try {
+				
+			
+				Console.WriteLine("Сжатие началось");
+				using (FileStream streaminFile = new FileStream(inFile, FileMode.Open)) {
+					using (FileStream outFile = new FileStream(pathOutFile, FileMode.Create)) {
+						while (streaminFile.Position < streaminFile.Length) {
+							Thread[] arrayThreads = new Thread[countThread];
+							for (int i = 0; (i < countThread) && (streaminFile.Position < streaminFile.Length); i++) {
 							
-							if (streaminFile.Length - streaminFile.Position <= buffersize) {
-								_buffersize = (int)(streaminFile.Length - streaminFile.Position);
-							} else {
-								_buffersize = buffersize;
-							}
+								if (streaminFile.Length - streaminFile.Position <= buffersize) {
+									_buffersize = (int)(streaminFile.Length - streaminFile.Position);
+								} else {
+									_buffersize = buffersize;
+								}
 							
-							Console.CursorLeft = 0;
-							Console.Write("{0:0.00} %", 100 * streaminFile.Position / streaminFile.Length);
+								Console.CursorLeft = 0;
+								Console.Write("{0:0.00} %", 100 * streaminFile.Position / streaminFile.Length);
 							
-							dataArray[i] = new byte[_buffersize];
-							streaminFile.Read(dataArray[i], 0, _buffersize);
+								dataArray[i] = new byte[_buffersize];
+								streaminFile.Read(dataArray[i], 0, _buffersize);
  
-							arrayThreads[i] = new Thread(CompressBlock);
-							arrayThreads[i].Start(i);
-						}
-	
-						for (int i = 0; (i < countThread) && (arrayThreads[i] != null);) {
-							if (arrayThreads[i].ThreadState == ThreadState.Stopped) {
-								BitConverter.GetBytes(TempDataArray[i].Length + 1).CopyTo(TempDataArray[i], 4);
-								outFile.Write(TempDataArray[i], 0, TempDataArray[i].Length);
-								i++;
+								arrayThreads[i] = new Thread(CompressBlock);
+								arrayThreads[i].Start(i);
 							}
 	
-						}						
+							for (int i = 0; (i < countThread) && (arrayThreads[i] != null);) {
+								if (arrayThreads[i].ThreadState == ThreadState.Stopped) {
+									BitConverter.GetBytes(TempDataArray[i].Length + 1).CopyTo(TempDataArray[i], 4);
+									outFile.Write(TempDataArray[i], 0, TempDataArray[i].Length);
+									i++;
+								}
+	
+							}						
+						}
+						outFile.Close();
 					}
-					outFile.Close();
+					streaminFile.Close();
 				}
-				streaminFile.Close();
+			} catch (Exception em) {
+				
+				Console.Write("Ошибка " + em.Message);
 			}
 		}
 		
@@ -87,47 +92,54 @@ namespace TestProject
 		public static void Decompress(string PathInFile, string PathoutFile)
 		{
 			PathoutFile = PathoutFile == "" ? PathInFile.Remove(PathInFile.Length - 3) : PathoutFile;
-			using (FileStream inFile = new FileStream(PathInFile, FileMode.Open)) {
-				using (FileStream outFile = new FileStream(PathoutFile, FileMode.Create)) {
+			try {
+				
+			
+				using (FileStream inFile = new FileStream(PathInFile, FileMode.Open)) {
+					using (FileStream outFile = new FileStream(PathoutFile, FileMode.Create)) {
                
-					int _dataPortionSize;
-					int compressedBlockLength;
-					Thread[] arrayThreads;
-					Console.WriteLine("Decompressing...");
-					byte[] buff = new byte[8];
+						int _dataPortionSize;
+						int compressedBlockLength;
+						Thread[] arrayThreads;
+						Console.WriteLine("Decompressing...");
+						byte[] buff = new byte[8];
                 
-					while (inFile.Position < inFile.Length) {
-						arrayThreads = new Thread[countThread];
+						while (inFile.Position < inFile.Length) {
+							arrayThreads = new Thread[countThread];
 				 
-						for (int i = 0; (i < countThread) && (inFile.Position < inFile.Length); i++) {
-							inFile.Read(buff, 0, 8);
-							compressedBlockLength = BitConverter.ToInt32(buff, 4);
-							TempDataArray[i] = new byte[compressedBlockLength];
+							for (int i = 0; (i < countThread) && (inFile.Position < inFile.Length); i++) {
+								inFile.Read(buff, 0, 8);
+								compressedBlockLength = BitConverter.ToInt32(buff, 4);
+								TempDataArray[i] = new byte[compressedBlockLength];
 					
-							buff.CopyTo(TempDataArray[i], 0);
-							inFile.Read(TempDataArray[i], 8, compressedBlockLength - 9);
+								buff.CopyTo(TempDataArray[i], 0);
+								inFile.Read(TempDataArray[i], 8, compressedBlockLength - 9);
 					
-							_dataPortionSize = BitConverter.ToInt32(TempDataArray[i], compressedBlockLength - 5);
-							dataArray[i] = new byte[_dataPortionSize];
+								_dataPortionSize = BitConverter.ToInt32(TempDataArray[i], compressedBlockLength - 5);
+								dataArray[i] = new byte[_dataPortionSize];
 					
-							Console.CursorLeft = 0;
-							Console.Write("{0:0.00} %", 100 * inFile.Position / inFile.Length);
+								Console.CursorLeft = 0;
+								Console.Write("{0:0.00} %", 100 * inFile.Position / inFile.Length);
 					
-							arrayThreads[i] = new Thread(DecompressBlock);
-							arrayThreads[i].Start(i);
-						}
-						for (int i = 0; (i < countThread) && arrayThreads[i] != null;) {
-							if (arrayThreads[i].ThreadState == ThreadState.Stopped) {
-						
-								outFile.Write(dataArray[i], 0, dataArray[i].Length);
-								i++;
+								arrayThreads[i] = new Thread(DecompressBlock);
+								arrayThreads[i].Start(i);
 							}
-						}
+							for (int i = 0; (i < countThread) && arrayThreads[i] != null;) {
+								if (arrayThreads[i].ThreadState == ThreadState.Stopped) {
+						
+									outFile.Write(dataArray[i], 0, dataArray[i].Length);
+									i++;
+								}
+							}
 				 
+						}
+						outFile.Close();
 					}
-					outFile.Close();
+					inFile.Close();
 				}
-				inFile.Close();
+			} catch (Exception em) {
+				
+				Console.Write("Ошибка " + em.Message);
 			}
 			
 		}
