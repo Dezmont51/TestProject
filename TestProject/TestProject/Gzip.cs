@@ -79,12 +79,8 @@ namespace TestProject
 		{
 			int element = (int)ii;
 			using (var ms = new MemoryStream(dataArray[element].Length)) {
-				
-			
-				using (var compressionstream = new GZipStream(ms, CompressionMode.Compress)) {
-					/*while ((nRead = streaminFile.Read(buffer, 0, buffer.Length)) > 0) {
-						compressionstream.Write(buffer, buffersize * i++, nRead);
-					}*/
+				using (var compressionstream = new GZipStream(ms, CompressionMode.Compress)) 
+				{
 					compressionstream.Write(dataArray[element], 0, dataArray[element].Length);
 						
 				}
