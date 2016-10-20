@@ -12,12 +12,35 @@ namespace TestProject
 {
 	class Program
 	{
+		
+		
 		public static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
-			
-			// TODO: Implement Functionality Here
-			
+			if (args.Length == 0) {
+				Console.WriteLine("Пожалуйста введите параметры -c - для упаковки [имя источника] [имя исходника]" +
+				"\n-d - для распаковки [имя источника] [имя исходника]\n" +
+				"-tf [Имя файла] [размер файла в Гб] - создать тестовый файл в гб");
+				Console.ReadKey(true);
+				return;
+			}
+			switch (args[0]) {
+				case "-c":
+					{
+						Gzip.Compress(args[1], args[2]);
+						break;}
+				case "-d":
+					{
+						Gzip.Decompress(args[1], args[2]);
+						break;}
+				case "-tf":
+					{
+						Gzip.TestFile(args[1], args[2]);
+						break;}
+				default:
+					Console.WriteLine("Пожалуйста введите параметры /c - для упаковки [имя источника] [имя исходника]\n/d - для распаковки [имя источника] [имя исходника]\n"+
+					"-tf [Имя файла] [размер файла в Гб] - создать тестовый файл в гб");		
+					break;
+			}
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
