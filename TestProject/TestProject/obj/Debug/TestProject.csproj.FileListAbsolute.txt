@@ -1,6 +1,0 @@
-D:\Mail.Ru\Облако\Cloud Mail.Ru\Сайт\TestProject\TestProject\TestProject\TestProject\bin\Debug\TestProject.exe.config
-D:\Mail.Ru\Облако\Cloud Mail.Ru\Сайт\TestProject\TestProject\TestProject\TestProject\bin\Debug\TestProject.exe
-D:\Mail.Ru\Облако\Cloud Mail.Ru\Сайт\TestProject\TestProject\TestProject\TestProject\bin\Debug\TestProject.pdb
-D:\Mail.Ru\Облако\Cloud Mail.Ru\Сайт\TestProject\TestProject\TestProject\TestProject\obj\Debug\TestProject.csprojResolveAssemblyReference.cache
-D:\Mail.Ru\Облако\Cloud Mail.Ru\Сайт\TestProject\TestProject\TestProject\TestProject\obj\Debug\TestProject.exe
-D:\Mail.Ru\Облако\Cloud Mail.Ru\Сайт\TestProject\TestProject\TestProject\TestProject\obj\Debug\TestProject.pdb
