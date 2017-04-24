@@ -30,6 +30,18 @@ def get_cur_in_sql(query):
     cur.execute(sql)
     return cur
 
+def get_in_base_city():
+ cur=get_cur_in_sql( "SELECT * FROM offices")
+ return [dict(id=row[0],city=row[1],text=row[2]) for row in cur.fetchall()]
+
+def get_in_base_user_dates():
+ cur = get_cur_in_sql("select * from users as u left join savings as s on u.id_user=s.id_user")
+ return [dict(id=row[0],city=row[1],text=row[2]) for row in cur.fetchall()]
+
+def get_in_base(query_id):
+ cur = get_cur_in_sql("SELECT * FROM Users WHERE id="+str(query_id))
+ return cur.fetchone()
+
 
 tasks=[
  {
