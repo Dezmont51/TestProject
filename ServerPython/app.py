@@ -20,6 +20,9 @@ def get_password(username):
 def unauthorized():
  return "Хватит Вводить всякую чушь"
 
+def get_connect():
+ return pymysql.connect(host='89.223.31.42', user='root', passwd='123', db='TestBase', charset="utf8")
+
 
 
 tasks=[
