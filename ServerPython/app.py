@@ -71,26 +71,6 @@ def get_task_id(task_id):
 def not_fount(error):
  return "Хватит уже вводить всякую дичь!!!!"
 
-
-tasks=[
- {
-  'id':1,
-  'title':u'Fuck'
- },
- {
-  'id':2,
-  'title':u'Ass'
- },
- {
-  'id':3,
-  'title':u'ерполдолдлодлодлодлодлBitch'
- }
-]
-
-
-
-
-
 if(__name__=='__main__'):
  app.debug=True
  app.run(host='0.0.0.0')
