@@ -42,6 +42,35 @@ def get_in_base(query_id):
  cur = get_cur_in_sql("SELECT * FROM Users WHERE id="+str(query_id))
  return cur.fetchone()
 
+@app.route('/todo/api/v1.0/tasks',methods=['GET'])
+def get_tasks():
+ return jsonify({'tasks':tasks})
+
+@app.route('/todo/api/v1.0/query/<int:query_id>',methods=['GET'])
+@auth.login_required
+def get_query(query_id):
+ return str(get_in_base(query_id)[1].encode("utf8"))+" "+str(get_in_base(query_id)[2].encode("utf8"))+" "+str(get_in_base(query_id)[3].encode("utf8"))
+
+@app.route('/todo/api/v1.0/query/get_city',methods=['GET'])
+#@auth.login_required
+def get_query_city():
+ return jsonify({'cities':get_in_base_city()})
+
+
+
+
+@app.route('/todo/api/v1.0/tasks/<int:task_id>',methods=['GET'])
+@auth.login_required
+def get_task_id(task_id):
+ task=filter(lambda t:t['id']==task_id,tasks)
+ if len(task)==0:
+   return u"Пошел нахер рукожоп!!!"
+ return jsonify({'task':task[0]})
+
+@app.errorhandler(404)
+def not_fount(error):
+ return "Хватит уже вводить всякую дичь!!!!"
+
 
 tasks=[
  {
