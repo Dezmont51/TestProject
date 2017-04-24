@@ -23,6 +23,12 @@ def unauthorized():
 def get_connect():
  return pymysql.connect(host='89.223.31.42', user='root', passwd='123', db='TestBase', charset="utf8")
 
+def get_cur_in_sql(query):
+    sql = query
+    db = get_connect()
+    cur = db.cursor()
+    cur.execute(sql)
+    return cur
 
 
 tasks=[
